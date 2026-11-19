@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <defs>
+    <linearGradient id="tapsyPlay" x1="10" y1="58" x2="54" y2="6" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#FF6A3D"/>
+      <stop offset="32%" stop-color="#E879F9"/>
+      <stop offset="62%" stop-color="#9333EA"/>
+      <stop offset="100%" stop-color="#3B82F6"/>
+    </linearGradient>
+  </defs>
+  <path
+    d="M20.2 11.2C18.1 9.95 15.5 11.45 15.5 13.9v36.2c0 2.45 2.6 3.95 4.7 2.7l31.2-18.1c2.05-1.2 2.05-4.2 0-5.4L20.2 11.2Z"
+    stroke="url(#tapsyPlay)"
+    stroke-width="8"
+    stroke-linejoin="round"
+    fill="none"
+  />
+</svg>
