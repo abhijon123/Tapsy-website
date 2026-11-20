@@ -81,7 +81,7 @@ export function StudioBoard() {
         </p>
       </div>
 
-      <div className="mx-auto grid max-w-5xl items-center gap-10 lg:grid-cols-2 lg:gap-12">
+      <div className="site-rail grid items-center gap-10 lg:grid-cols-2 lg:gap-14">
         <div>
           <div className="mb-5 inline-flex rounded-full bg-white/[0.06] p-1">
             {(
@@ -142,7 +142,7 @@ export function StudioBoard() {
                 src="/assets/app-reel-bellavista.png"
                 alt="Your take"
                 fill
-                className="object-cover"
+                className="phone-media"
               />
             </div>
             <div className="min-w-0 flex-1">

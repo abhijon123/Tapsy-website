@@ -50,8 +50,8 @@ export function ScrollySteps() {
         : { text: "Outstanding", color: "text-violet-300" };
 
   return (
-    <section id="how-it-works" className="relative bg-background pb-6 pt-16 sm:pt-20">
-      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+    <section id="how-it-works" className="site-section relative bg-background">
+      <div className="site-rail">
         <Reveal className="mx-auto mb-8 max-w-2xl text-center">
           <h2 className="type-section text-foreground">
             <span className="block">From tap to</span>
@@ -59,7 +59,7 @@ export function ScrollySteps() {
               trusted take.
             </span>
           </h2>
-          <p className="type-lead mx-auto mt-3 max-w-xl">
+          <p className="type-lead mx-auto mt-3">
             {stepsIntro.subheading}
           </p>
         </Reveal>
@@ -67,7 +67,7 @@ export function ScrollySteps() {
         {/* Compact auto-playing stage — no 280vh scroll gap */}
         <div className="relative">
           <div className="flex items-center">
-            <div className="mx-auto grid w-full max-w-6xl grid-cols-1 items-center gap-8 lg:grid-cols-2 lg:gap-14">
+            <div className="mx-auto grid w-full grid-cols-1 items-center gap-8 lg:grid-cols-2 lg:gap-14">
             {/* Left: step copy driven by scroll */}
             <div className="relative order-2 lg:order-1">
               <AnimatePresence mode="wait">
@@ -160,7 +160,7 @@ export function ScrollySteps() {
                             src="/assets/app-reel-bellavista.png"
                             alt="Recording viewfinder"
                             fill
-                            className="object-cover"
+                            className="phone-media"
                           />
                           <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20" />
                           <motion.div

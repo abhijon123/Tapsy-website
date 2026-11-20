@@ -9,21 +9,22 @@ import { TypewriterText } from "@/components/ui/hero-4";
 
 export function DownloadCTA() {
   return (
-    <section id="download-cta" className="bg-white px-4 py-6 sm:px-6 sm:py-8">
+    <section id="download-cta" className="site-section-tight bg-white">
+      <div className="site-rail">
       <Reveal>
-        <div className="relative mx-auto max-w-5xl overflow-hidden rounded-[28px] text-white">
+        <div className="relative overflow-hidden rounded-[28px] text-white">
           <Image
             src="/assets/download-cta-official.png"
             alt=""
             fill
             priority
             className="object-cover object-[72%_center] sm:object-center"
-            sizes="(max-width: 1024px) 100vw, 1024px"
+            sizes="(max-width: 1280px) 100vw, 1280px"
           />
 
-          <div className="relative z-10 flex min-h-[300px] items-center px-7 py-11 sm:min-h-[360px] sm:px-12 sm:py-14 lg:min-h-[400px] lg:px-14 lg:py-16">
-            <div className="flex w-full max-w-[34rem] flex-col gap-5">
-              <h2 className="text-[clamp(1.65rem,3vw,2.15rem)] font-semibold tracking-[-0.02em] leading-[1.2] text-white drop-shadow-[0_1px_12px_rgba(76,29,149,0.35)]">
+          <div className="relative z-10 flex min-h-[320px] items-center px-8 py-12 sm:min-h-[380px] sm:px-12 sm:py-14 lg:min-h-[420px] lg:px-16 lg:py-16">
+            <div className="flex w-full max-w-[38rem] flex-col gap-5">
+              <h2 className="text-[clamp(1.75rem,3.2vw,2.35rem)] font-semibold tracking-[-0.02em] leading-[1.2] text-white drop-shadow-[0_1px_12px_rgba(76,29,149,0.35)]">
                 Show It.{" "}
                 <TypewriterText
                   gradient={false}
@@ -56,6 +57,7 @@ export function DownloadCTA() {
           </div>
         </div>
       </Reveal>
+      </div>
     </section>
   );
 }

@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
-export interface HeroTypewriterProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface HeroTypewriterProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "title"> {
   title: React.ReactNode;
   animatedTexts: string[];
   subtitle: string;
@@ -73,7 +73,7 @@ export function TypewriterText({
     <span
       className={cn(
         // Extra right pad so italic glyphs + cursor never clip
-        "relative inline-block overflow-visible whitespace-nowrap align-baseline italic leading-[inherit] pr-[0.4em]",
+        "relative inline-block overflow-visible whitespace-nowrap align-baseline italic leading-[inherit] pr-[0.55em]",
         className
       )}
     >
@@ -83,7 +83,7 @@ export function TypewriterText({
       </span>
       <span
         className={cn(
-          "absolute left-0 top-0 overflow-visible whitespace-nowrap pr-[0.4em]",
+          "absolute left-0 top-0 overflow-visible whitespace-nowrap pr-[0.55em]",
           gradient ? "text-gradient-typewriter" : "text-inherit"
         )}
       >

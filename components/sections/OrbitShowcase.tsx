@@ -66,19 +66,19 @@ const gallery = [
 
 export function OrbitShowcase() {
   return (
-    <section className="relative overflow-hidden bg-white py-14 sm:py-20">
-      <div className="mx-auto max-w-6xl px-4 sm:px-6">
+    <section className="site-section relative overflow-hidden bg-white">
+      <div className="site-rail">
         <div className="mx-auto mb-10 max-w-2xl text-center sm:mb-14">
           <h2 className="type-section text-zinc-950">
             <WordsPullUp text="Everything in one tap" className="justify-center" />
           </h2>
-          <p className="type-lead mx-auto mt-3 max-w-lg">
+          <p className="type-lead mx-auto mt-3">
             Reviews, ratings, tags, and discovery — the product around the take.
           </p>
         </div>
 
         {/* 3-column stage: left cards | phone | right cards — guaranteed gap */}
-        <div className="relative mx-auto grid max-w-5xl items-center gap-6 sm:gap-8 lg:grid-cols-[minmax(0,1fr)_260px_minmax(0,1fr)] lg:gap-10">
+        <div className="relative mx-auto grid w-full items-center gap-6 sm:gap-8 lg:grid-cols-[minmax(0,1fr)_280px_minmax(0,1fr)] lg:gap-12">
           <div
             aria-hidden
             className="pointer-events-none absolute left-1/2 top-1/2 hidden h-[70%] w-[40%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,rgba(217,70,239,0.07),transparent_70%)] lg:block"
@@ -188,7 +188,7 @@ export function OrbitShowcase() {
                     alt="Tapsy video review"
                     fill
                     sizes="260px"
-                    className="object-cover object-[center_8%] scale-[1.12]"
+                    className="phone-media"
                   />
                 </div>
               </div>

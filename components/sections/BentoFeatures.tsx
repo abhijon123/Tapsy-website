@@ -9,10 +9,10 @@ import { MagicCard } from "@/components/ui/magic-card";
 import { useSectionParallax } from "@/hooks/useParallax";
 
 export function BentoFeatures() {
-  const { ref, y } = useSectionParallax(0.08);
+  const { ref, y } = useSectionParallax(0.04);
 
   return (
-    <section id="features" ref={ref} className="relative overflow-hidden py-20 sm:py-24">
+    <section id="features" ref={ref} className="site-section relative overflow-hidden">
       <div
         aria-hidden
         className="pointer-events-none absolute -left-24 top-10 h-72 w-72 rounded-full bg-violet-200/30 blur-3xl will-change-transform"
@@ -23,13 +23,13 @@ export function BentoFeatures() {
         className="pointer-events-none absolute -right-16 bottom-10 h-64 w-64 rounded-full bg-fuchsia-200/25 blur-3xl will-change-transform"
         style={{ transform: `translate3d(0, ${-y}px, 0)` }}
       />
-      <div className="relative mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+      <div className="site-rail relative">
         <Reveal className="mx-auto mb-12 max-w-2xl text-center">
           <h2 className="type-section text-foreground">
             Built for how people{" "}
             <span className="italic text-gradient-tapsy">actually decide</span>
           </h2>
-          <p className="type-lead mx-auto mt-4 max-w-xl">
+          <p className="type-lead mx-auto mt-4">
             Old review sites give you walls of text. Tapsy gives you authentic 30s
             clips — food, fitness, travel, beauty, nightlife — from people you can see and hear.
           </p>

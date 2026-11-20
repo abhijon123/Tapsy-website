@@ -54,31 +54,34 @@ export function HeroSection() {
       <div className="absolute inset-0 -z-10">
         <div className="absolute inset-0 bg-[linear-gradient(to_bottom,white_0%,rgba(255,255,255,0.7)_6%,transparent_22%)]" />
         <div className="absolute inset-0 bg-gradient-to-b from-black/35 via-[#0a0a0f]/70 to-[#0a0a0f]" />
-        <div className="absolute inset-0 bg-gradient-to-r from-[#0a0a0f]/70 via-black/20 to-[#0a0a0f]/55" />
-        {/* Soft handoff into Publish (same base #0a0a0f) */}
+        <div className="absolute inset-0 bg-gradient-to-r from-[#0a0a0f]/75 via-black/25 to-transparent" />
         <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-b from-transparent to-[#0a0a0f]" />
       </div>
 
+      {/* Near full-bleed — fills the screen without big side voids */}
       <div
-        className="mx-auto flex min-h-[100svh] max-w-7xl flex-col px-4 pb-16 pt-28 sm:px-6 lg:px-8 lg:pb-20 lg:pt-32"
+        className="relative mx-auto flex min-h-[100svh] w-full max-w-[1500px] flex-col justify-center px-5 pb-12 pt-24 sm:px-8 md:px-10 lg:px-12 xl:px-16"
         style={{ transform: `translate3d(0, ${offset * -0.08}px, 0)` }}
       >
-        <div className="grid flex-1 items-center gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:gap-8">
-          <div className="relative z-10 max-w-xl text-white">
+        <div className="grid w-full items-center gap-10 md:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] md:gap-12 lg:gap-16 xl:gap-20">
+          <div className="relative z-10 w-full max-w-2xl text-white">
             <p className="animate-in text-[13px] font-medium tracking-wide text-white/55">
               {hero.badge}
             </p>
 
-            <h1 className="animate-in animate-in-delay-1 mt-4 overflow-visible text-[clamp(2.35rem,5.5vw,3.85rem)] font-bold tracking-[-0.04em] leading-[1.2]">
-              Why type when you can{" "}
-              <TypewriterText texts={["tap?", "record?", "share?", "discover?"]} />
+            <h1 className="animate-in animate-in-delay-1 mt-3 overflow-visible text-[clamp(2.25rem,4.6vw,3.6rem)] font-bold tracking-[-0.04em] leading-[1.15]">
+              <span className="block">Why type when you</span>
+              <span className="block">
+                can{" "}
+                <TypewriterText texts={["tap?", "record?", "share?", "discover?"]} />
+              </span>
             </h1>
 
-            <p className="animate-in animate-in-delay-2 mt-5 max-w-md text-[16px] leading-[1.65] text-white/72 sm:text-[17px]">
+            <p className="animate-in animate-in-delay-2 mt-5 max-w-xl text-[16px] leading-[1.65] text-white/70 sm:text-[17px]">
               {hero.description}
             </p>
 
-            <div className="animate-in animate-in-delay-3 mt-8 flex flex-wrap items-center gap-3">
+            <div className="animate-in animate-in-delay-3 mt-7 flex flex-wrap items-center gap-3">
               <Button
                 size="lg"
                 variant="gradient"
@@ -109,7 +112,7 @@ export function HeroSection() {
             <div className="animate-in animate-in-delay-4 mt-6 flex items-center">
               <div className="flex -space-x-3">
                 {avatarData.map((avatar) => (
-                  <Avatar key={avatar.alt} className="h-9 w-9 border-2 border-[#0a0a0f]">
+                  <Avatar key={avatar.alt} className="h-8 w-8 border-2 border-[#0a0a0f]">
                     <AvatarImage src={avatar.src} alt={avatar.alt} />
                     <AvatarFallback>{avatar.fallback}</AvatarFallback>
                   </Avatar>
@@ -122,7 +125,7 @@ export function HeroSection() {
           </div>
 
           <div
-            className="animate-in animate-in-delay-3 relative z-10 flex justify-center lg:justify-end"
+            className="animate-in animate-in-delay-3 relative z-10 flex items-center justify-center md:justify-end"
             style={{ transform: `translate3d(0, ${offset * -0.14}px, 0)` }}
           >
             <HeroMockup />

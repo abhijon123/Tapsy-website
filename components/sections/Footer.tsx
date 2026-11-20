@@ -10,8 +10,8 @@ export function Footer() {
   const { footer } = siteContent;
 
   return (
-    <footer className="border-t border-zinc-100 px-4 pb-10 pt-14 sm:px-6 lg:px-8">
-      <div className="mx-auto max-w-5xl">
+    <footer className="site-section-tight border-t border-zinc-100">
+      <div className="site-rail">
         <div className="mb-10 flex flex-col items-center justify-between gap-6 md:flex-row">
           <div className="flex flex-col items-center md:items-start">
             <Link href="/" className="mb-1.5 flex items-center">

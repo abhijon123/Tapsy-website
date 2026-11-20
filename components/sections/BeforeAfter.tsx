@@ -11,16 +11,16 @@ import { cn } from "@/lib/utils";
 
 export function BeforeAfter() {
   const [mode, setMode] = useState<"text" | "video">("video");
-  const { ref, y } = useSectionParallax(0.14);
+  const { ref, y } = useSectionParallax(0.06);
 
   return (
-    <section className="bg-zinc-50 py-16 sm:py-20">
-      <div className="mx-auto max-w-5xl px-4 sm:px-6">
+    <section className="site-section bg-zinc-50">
+      <div className="site-rail">
         <BlurFade className="mx-auto max-w-2xl text-center">
           <h2 className="type-section text-foreground">
             <WordsPullUp text="Same place. Totally different trust." className="justify-center" />
           </h2>
-          <p className="type-lead mx-auto mt-3 max-w-xl">
+          <p className="type-lead mx-auto mt-3">
             Reading “great vibes” is guesswork. Watching a 30-second take is proof.
           </p>
         </BlurFade>
@@ -95,7 +95,7 @@ export function BeforeAfter() {
                       src="/assets/app-reel-bellavista.png"
                       alt="Tapsy video review of Bella Vista"
                       fill
-                      className="object-cover"
+                      className="phone-media"
                     />
                   </div>
                   <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/20" />

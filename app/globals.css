@@ -184,6 +184,20 @@
     @apply relative h-full w-full overflow-hidden rounded-[1.9rem] bg-black;
   }
 
+  /* iPhone 15-style frame — thin bezel, Dynamic Island ready */
+  .iphone {
+    @apply relative rounded-[2.75rem] bg-[#1c1c1e] p-[10px];
+    box-shadow:
+      0 0 0 1px rgba(255, 255, 255, 0.08),
+      0 1px 0 rgba(255, 255, 255, 0.12) inset,
+      0 32px 64px -20px rgba(0, 0, 0, 0.6),
+      0 14px 28px -12px rgba(0, 0, 0, 0.45);
+  }
+
+  .iphone-screen {
+    @apply relative h-full w-full overflow-hidden rounded-[2.15rem] bg-black;
+  }
+
   .section-eyebrow {
     @apply inline-flex items-center gap-2 rounded-full bg-violet-50 px-3.5 py-1 text-[13px] font-medium text-violet-700 dark:bg-violet-500/10 dark:text-violet-300;
   }
@@ -203,11 +217,13 @@
     letter-spacing: -0.035em;
     font-size: clamp(2rem, 4.2vw, 3.25rem);
     line-height: 1.2;
+    overflow: visible;
   }
 
   .type-lead {
     font-size: 17px;
     line-height: 1.65;
+    max-width: 40rem;
     color: hsl(var(--muted-foreground));
   }
 
@@ -215,6 +231,24 @@
     .type-lead {
       font-size: 18px;
     }
+  }
+
+  /* Shared page rail — fuller width so sections feel filled */
+  .site-rail {
+    @apply mx-auto w-full max-w-7xl px-5 sm:px-8 lg:px-10;
+  }
+
+  .site-section {
+    @apply py-16 sm:py-20;
+  }
+
+  .site-section-tight {
+    @apply py-10 sm:py-14;
+  }
+
+  /* Consistent phone media crop across mockups */
+  .phone-media {
+    @apply object-cover object-[center_8%] scale-[1.1];
   }
 
   .type-meta {
@@ -348,7 +382,7 @@
 }
 
 .live-ticker {
-  animation: ticker 28s linear infinite;
+  animation: ticker 42s linear infinite;
 }
 
 @keyframes fill-bar {

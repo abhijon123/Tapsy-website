@@ -40,7 +40,7 @@ export function Navbar() {
           : "bg-white/80 backdrop-blur-xl"
       )}
     >
-      <nav className="mx-auto flex w-full max-w-5xl items-center justify-between px-4 py-3.5 sm:px-6 lg:px-8">
+      <nav className="site-rail flex w-full items-center justify-between py-3.5">
         <Link href="/" className="flex items-center">
           <BrandLogo size="lg" className="h-11 w-auto sm:h-12" />
         </Link>

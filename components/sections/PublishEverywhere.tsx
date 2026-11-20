@@ -47,23 +47,23 @@ export function PublishEverywhere() {
   return (
     <section
       id="publish"
-      className="relative overflow-hidden bg-[#0a0a0f] pb-20 pt-4 text-white sm:pb-28 sm:pt-6"
+      className="relative overflow-hidden bg-[#0a0a0f] py-16 text-white sm:py-20"
     >
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_20%_0%,rgba(124,58,237,0.22),transparent_50%)]" />
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_90%_80%,rgba(217,70,239,0.14),transparent_45%)]" />
 
-      <div className="relative mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+      <div className="site-rail relative">
         {/* Trust metrics — open, no divider strokes */}
-        <Reveal className="mb-14 py-8 sm:mb-16 sm:py-10">
+        <Reveal className="mb-12 sm:mb-14">
           <MetricsStrip />
         </Reveal>
 
         <Reveal className="mx-auto mb-12 max-w-2xl text-center">
-          <h2 className="text-[clamp(2rem,4.5vw,3.4rem)] font-bold tracking-[-0.035em] leading-[1.08]">
+          <h2 className="type-section text-white">
             Tap once.{" "}
             <span className="italic text-gradient-tapsy">It lands everywhere.</span>
           </h2>
-          <p className="mt-4 text-[16px] leading-relaxed text-white/60 sm:text-[17px]">
+          <p className="type-lead mx-auto mt-4 text-white/60">
             One 30-second take for any spot — cafe, gym, hotel, salon, or night out.
             Tapsy drops it across discover, followers, nearby, and every category you tag.
           </p>
@@ -136,7 +136,7 @@ export function PublishEverywhere() {
                     src="/assets/app-reel-bellavista.png"
                     alt="Your take"
                     fill
-                    className="object-cover"
+                    className="phone-media"
                   />
                 </div>
                 <div className="min-w-0 flex-1">

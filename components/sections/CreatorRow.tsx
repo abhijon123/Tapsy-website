@@ -78,13 +78,13 @@ export function CreatorRow() {
   const [following, setFollowing] = useState<Record<string, boolean>>({});
 
   return (
-    <section id="creators" className="bg-white py-16 sm:py-20">
-      <div className="mx-auto max-w-6xl px-4 sm:px-6">
-        <h2 className="overflow-visible text-center text-[clamp(2rem,4vw,3.1rem)] font-extrabold tracking-[-0.04em] leading-[1.2] text-zinc-950">
+    <section id="creators" className="site-section bg-white">
+      <div className="site-rail">
+        <h2 className="type-section overflow-visible text-center text-zinc-950">
           Why type when you can{" "}
           <TypewriterText texts={["tap?", "film?", "post?", "glow?"]} />
         </h2>
-        <p className="mx-auto mt-4 max-w-2xl text-center text-[15px] leading-relaxed text-zinc-500 sm:text-[16px]">
+        <p className="type-lead mx-auto mt-4 text-center">
           Forget outdated text and long paragraphs. With Tapsy, recording a review is as easy as
           hitting play — restaurants, gyms, hotels, salons, nightlife. One tap shares your take.
         </p>

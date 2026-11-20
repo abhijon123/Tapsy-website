@@ -4,15 +4,16 @@ import { siteLinks } from "@/lib/content";
 
 export function TrustBanner() {
   return (
-    <section className="bg-white px-4 py-6 sm:px-6 sm:py-8">
-      <div className="relative mx-auto flex max-w-5xl min-h-[160px] items-center justify-center overflow-hidden rounded-[28px] px-6 py-8 text-center text-white sm:min-h-[180px] sm:px-12 sm:py-9">
+    <section className="site-section-tight bg-white">
+      <div className="site-rail">
+        <div className="relative flex min-h-[180px] items-center justify-center overflow-hidden rounded-[28px] px-8 py-10 text-center text-white sm:min-h-[210px] sm:px-14 sm:py-12 lg:min-h-[230px]">
         <div className="absolute inset-0 bg-gradient-to-r from-[#4C1D95] via-[#A21CAF] to-[#FB923C]" />
 
-        <div className="relative z-10">
-          <h2 className="text-[clamp(1.75rem,3.5vw,2.75rem)] font-extrabold tracking-[-0.04em] leading-[1.15] text-white">
+        <div className="relative z-10 max-w-3xl">
+          <h2 className="text-[clamp(1.9rem,3.8vw,3rem)] font-extrabold tracking-[-0.04em] leading-[1.15] text-white">
             Be seen. Be heard. Be shared.
           </h2>
-          <p className="mx-auto mt-2.5 max-w-xl text-[15px] leading-relaxed text-white/85 sm:text-[16px]">
+          <p className="mx-auto mt-3 max-w-2xl text-[15px] leading-relaxed text-white/85 sm:text-[17px]">
             Turn personal experiences into stories people trust and share.
           </p>
 
@@ -54,6 +55,7 @@ export function TrustBanner() {
             </a>
           </div>
         </div>
+      </div>
       </div>
     </section>
   );

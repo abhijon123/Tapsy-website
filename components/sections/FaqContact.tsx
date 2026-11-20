@@ -33,14 +33,14 @@ export function FaqContact() {
   const [sent, setSent] = useState(false);
 
   return (
-    <section id="faq" className="bg-[#f7f7f8] px-4 py-14 sm:px-6 sm:py-16">
-      <div className="mx-auto grid max-w-5xl gap-12 lg:grid-cols-2 lg:gap-14">
+    <section id="faq" className="site-section bg-[#f7f7f8]">
+      <div className="site-rail grid gap-12 lg:grid-cols-2 lg:gap-16 xl:gap-20">
         {/* Contact */}
         <div>
-          <h2 className="text-[clamp(1.75rem,2.8vw,2.35rem)] font-extrabold tracking-[-0.04em] text-zinc-950">
+          <h2 className="text-[clamp(1.85rem,3vw,2.5rem)] font-extrabold tracking-[-0.04em] text-zinc-950">
             <WordsPullUp text="We’d love to hear from you" className="!flex-nowrap" />
           </h2>
-          <p className="mt-3 max-w-md text-[16px] leading-relaxed text-zinc-500">
+          <p className="mt-3 max-w-lg text-[16px] leading-relaxed text-zinc-500 sm:text-[17px]">
             Whether you’re curious about features, need support, or just want to share feedback — we’re
             here to listen and help.
           </p>
@@ -82,10 +82,10 @@ export function FaqContact() {
 
         {/* FAQ */}
         <div className="min-w-0">
-          <h2 className="text-[clamp(1.75rem,2.8vw,2.35rem)] font-extrabold tracking-[-0.04em] text-zinc-950">
+          <h2 className="text-[clamp(1.85rem,3vw,2.5rem)] font-extrabold tracking-[-0.04em] text-zinc-950">
             <WordsPullUp text="Frequently asked questions" className="!flex-nowrap" />
           </h2>
-          <p className="mt-3 max-w-md text-[16px] leading-relaxed text-zinc-500">
+          <p className="mt-3 max-w-lg text-[16px] leading-relaxed text-zinc-500 sm:text-[17px]">
             Got questions? Here are some quick answers to help you get started with Tapsy.
           </p>
 
@@ -100,7 +100,7 @@ export function FaqContact() {
                   className="w-full rounded-2xl border border-zinc-200 bg-white px-4 py-3.5 text-left shadow-[0_1px_2px_rgba(15,10,40,0.03)] transition hover:border-zinc-300 sm:px-5"
                 >
                   <span className="flex items-center justify-between gap-3">
-                    <span className="whitespace-nowrap text-[15px] font-semibold text-zinc-900">
+                    <span className="text-[15px] font-semibold leading-snug text-zinc-900 sm:text-[16px]">
                       {item.q}
                     </span>
                     <span

@@ -66,10 +66,10 @@ export function Pricing() {
   const [yearly, setYearly] = useState(false);
 
   return (
-    <section id="pricing" className="bg-zinc-50 py-12 sm:py-16">
-      <div className="mx-auto max-w-6xl px-4 sm:px-6">
+    <section id="pricing" className="site-section bg-zinc-50">
+      <div className="site-rail">
         <BlurFade className="flex flex-col items-start justify-between gap-5 sm:flex-row sm:items-end">
-          <div className="max-w-xl">
+          <div className="max-w-2xl">
             <h2 className="type-section text-zinc-950">
               <WordsPullUp text="Pricing" />
             </h2>
@@ -100,7 +100,7 @@ export function Pricing() {
           </div>
         </BlurFade>
 
-        <div className="mt-10 grid items-stretch gap-5 lg:grid-cols-3 lg:gap-6">
+        <div className="mt-10 grid items-stretch gap-5 sm:gap-6 lg:grid-cols-3 lg:gap-7">
           {plans.map((plan) => {
             const price = yearly ? plan.yearly : plan.monthly;
             return (
