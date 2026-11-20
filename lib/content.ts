@@ -1,3 +1,5 @@
+import { assetUrl } from "@/lib/utils";
+
 export interface Creator {
   id: string;
   name: string;
@@ -207,7 +209,7 @@ export const siteContent = {
       title: "Latte art ritual",
       place: "Artisan Coffee Lab",
       category: "Cafe",
-      image: "/assets/cafe-vibe.jpg",
+      image: assetUrl("/assets/cafe-vibe.jpg"),
       rating: 4.9,
       duration: "0:22",
     },
@@ -216,7 +218,7 @@ export const siteContent = {
       title: "Neon hour cocktails",
       place: "Sky Lounge",
       category: "Nightlife",
-      image: "/assets/nightlife-vibe.jpg",
+      image: assetUrl("/assets/nightlife-vibe.jpg"),
       rating: 4.8,
       duration: "0:30",
     },
@@ -308,7 +310,7 @@ export const siteContent = {
         "Smart trim, audio clean, overlays, and badges — without leaving the app.",
       tag: "Pro tools",
       icon: "Sparkles",
-      image: "/assets/creator-recording-feature.png",
+      image: assetUrl("/assets/creator-recording-feature.png"),
     },
     {
       title: "Discover local gems",
@@ -316,7 +318,7 @@ export const siteContent = {
         "Curated feeds by vibe, neighborhood, and verified video ratings.",
       tag: "Geotagged",
       icon: "Compass",
-      image: "/assets/app-discover.png",
+      image: assetUrl("/assets/app-discover.png"),
     },
   ],
   footer: {

@@ -13,7 +13,7 @@ import {
   Share2,
 } from "lucide-react";
 import { WordsPullUp } from "@/components/ui/words-pull-up";
-import { cn } from "@/lib/utils";
+import { cn, assetUrl } from "@/lib/utils";
 
 function Drift({
   children,
@@ -184,7 +184,7 @@ export function OrbitShowcase() {
               <div className="hero-phone aspect-[9/19.2]">
                 <div className="hero-phone-screen">
                   <Image
-                    src="/assets/app-reel-bellavista.png"
+                    src={assetUrl("/assets/app-reel-bellavista.png")}
                     alt="Tapsy video review"
                     fill
                     sizes="260px"
@@ -247,7 +247,7 @@ export function OrbitShowcase() {
               <div className="overflow-hidden rounded-[1.4rem] bg-[#111113] p-[5px] shadow-[0_22px_44px_-18px_rgba(0,0,0,0.45)]">
                 <div className="relative aspect-[9/16] overflow-hidden rounded-[1.15rem] bg-black">
                   <Image
-                    src="/assets/app-discover.png"
+                    src={assetUrl("/assets/app-discover.png")}
                     alt="Tapsy Discover"
                     fill
                     sizes="120px"

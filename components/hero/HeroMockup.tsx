@@ -5,6 +5,7 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import { Play } from "lucide-react";
 import { VideoDialog } from "@/components/ui/video-dialog";
+import { assetUrl } from "@/lib/utils";
 
 export function HeroMockup() {
   const [open, setOpen] = useState(false);
@@ -35,7 +36,7 @@ export function HeroMockup() {
             aria-label="Play Bella Vista review preview"
           >
             <Image
-              src="/assets/app-reel-bellavista.png"
+              src={assetUrl("/assets/app-reel-bellavista.png")}
               alt="Tapsy 30s video review of Bella Vista"
               fill
               priority
@@ -55,7 +56,7 @@ export function HeroMockup() {
       <VideoDialog
         open={open}
         onOpenChange={setOpen}
-        posterSrc="/assets/app-reel-bellavista.png"
+        posterSrc={assetUrl("/assets/app-reel-bellavista.png")}
       />
     </div>
   );

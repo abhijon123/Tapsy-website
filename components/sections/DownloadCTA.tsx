@@ -6,6 +6,7 @@ import { motion } from "framer-motion";
 import { Reveal } from "@/components/ui/reveal";
 import { AppStoreBadge, GooglePlayBadge } from "@/components/ui/store-badges";
 import { TypewriterText } from "@/components/ui/hero-4";
+import { assetUrl } from "@/lib/utils";
 
 export function DownloadCTA() {
   return (
@@ -14,7 +15,7 @@ export function DownloadCTA() {
       <Reveal>
         <div className="relative overflow-hidden rounded-[28px] text-white">
           <Image
-            src="/assets/download-cta-official.png"
+            src={assetUrl("/assets/download-cta-official.png")}
             alt=""
             fill
             priority

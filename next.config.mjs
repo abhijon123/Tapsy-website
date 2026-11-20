@@ -1,10 +1,16 @@
 /** @type {import('next').NextConfig} */
-const isProd = process.env.NODE_ENV === 'production';
-const repoName = 'Tapsy-website';
+const isProd = process.env.NODE_ENV === "production";
+const repoName = "Tapsy-website";
+const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? (isProd && !process.env.CUSTOM_DOMAIN ? `/${repoName}` : "");
 
 const nextConfig = {
-  output: 'export',
-  basePath: process.env.NEXT_PUBLIC_BASE_PATH ?? (isProd && !process.env.CUSTOM_DOMAIN ? `/${repoName}` : ''),
+  output: "export",
+  basePath: basePath,
+  assetPrefix: basePath ? `${basePath}/` : undefined,
+  trailingSlash: true,
+  env: {
+    NEXT_PUBLIC_BASE_PATH: basePath,
+  },
   reactStrictMode: true,
   images: {
     unoptimized: true,

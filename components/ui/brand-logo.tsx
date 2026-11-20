@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { cn } from "@/lib/utils";
+import { cn, assetUrl } from "@/lib/utils";
 
 type BrandLogoProps = {
   className?: string;
@@ -23,7 +23,7 @@ export function BrandLogo({
     const h = fullH[size];
     return (
       <Image
-        src="/assets/tapsy-logo-clear.png"
+        src={assetUrl("/assets/tapsy-logo-clear.png")}
         alt="tapsy"
         width={Math.round(h * (180 / 54))}
         height={h}
@@ -37,7 +37,7 @@ export function BrandLogo({
   const px = markPx[size];
   return (
     <Image
-      src="/assets/tapsy-mark.svg"
+      src={assetUrl("/assets/tapsy-mark.svg")}
       alt="tapsy"
       width={px}
       height={px}

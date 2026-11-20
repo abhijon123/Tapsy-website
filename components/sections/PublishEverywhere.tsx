@@ -6,7 +6,7 @@ import { Check, Compass, MapPin, Flame, Users, Utensils, Moon, Coffee } from "lu
 import { Reveal } from "@/components/ui/reveal";
 import { AnimatedBeam } from "@/components/ui/animated-beam";
 import { MetricsStrip } from "@/components/sections/MetricsStrip";
-import { cn } from "@/lib/utils";
+import { cn, assetUrl } from "@/lib/utils";
 
 const destinations = [
   { id: "discover", label: "Discover feed", handle: "Near you", icon: Compass, color: "from-blue-500 to-violet-500" },
@@ -133,7 +133,7 @@ export function PublishEverywhere() {
               <div className="relative z-10 mb-4 flex items-center gap-3 rounded-2xl bg-black/35 p-3">
                 <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-xl">
                   <Image
-                    src="/assets/app-reel-bellavista.png"
+                    src={assetUrl("/assets/app-reel-bellavista.png")}
                     alt="Your take"
                     fill
                     className="phone-media"

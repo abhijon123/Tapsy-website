@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { cn } from "@/lib/utils";
+import { cn, assetUrl } from "@/lib/utils";
 import { siteLinks } from "@/lib/content";
 
 /** Official-style App Store badge */
@@ -65,7 +65,7 @@ export function GooglePlayBadge({
     >
       <span className="relative h-9 w-9 shrink-0 overflow-hidden rounded-md sm:h-10 sm:w-10">
         <Image
-          src="/assets/google-play-badge.png"
+          src={assetUrl("/assets/google-play-badge.png")}
           alt=""
           fill
           className="object-cover object-center scale-150"

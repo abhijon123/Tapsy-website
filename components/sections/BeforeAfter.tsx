@@ -7,7 +7,7 @@ import { Type, Video } from "lucide-react";
 import { WordsPullUp } from "@/components/ui/words-pull-up";
 import { BlurFade } from "@/components/ui/blur-fade";
 import { useSectionParallax } from "@/hooks/useParallax";
-import { cn } from "@/lib/utils";
+import { cn, assetUrl } from "@/lib/utils";
 
 export function BeforeAfter() {
   const [mode, setMode] = useState<"text" | "video">("video");
@@ -92,7 +92,7 @@ export function BeforeAfter() {
                     style={{ transform: `translate3d(0, ${y}px, 0)` }}
                   >
                     <Image
-                      src="/assets/app-reel-bellavista.png"
+                      src={assetUrl("/assets/app-reel-bellavista.png")}
                       alt="Tapsy video review of Bella Vista"
                       fill
                       className="phone-media"

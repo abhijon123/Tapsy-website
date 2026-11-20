@@ -9,6 +9,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { siteContent } from "@/lib/content";
 import { Play, Smartphone } from "lucide-react";
 import { useParallax } from "@/hooks/useParallax";
+import { assetUrl } from "@/lib/utils";
 
 const avatarData = [
   {
@@ -44,7 +45,7 @@ export function HeroSection() {
         style={{ transform: `translate3d(0, ${offset * 0.28}px, 0) scale(1.1)` }}
       >
         <Image
-          src="/assets/hero-atmosphere.jpg"
+          src={assetUrl("/assets/hero-atmosphere.jpg")}
           alt=""
           fill
           priority

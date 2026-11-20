@@ -9,7 +9,7 @@ import {
   MapPin,
   ShieldCheck,
 } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { cn, assetUrl } from "@/lib/utils";
 
 const steps = [
   {
@@ -139,7 +139,7 @@ export function StudioBoard() {
           <div className="mb-4 flex items-center gap-3 rounded-2xl bg-black/35 p-3">
             <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-xl">
               <Image
-                src="/assets/app-reel-bellavista.png"
+                src={assetUrl("/assets/app-reel-bellavista.png")}
                 alt="Your take"
                 fill
                 className="phone-media"
