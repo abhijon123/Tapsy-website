@@ -21,7 +21,25 @@ export interface VenueShot {
   image: string;
   rating: number;
   duration: string;
+  /** Optional muted loop for phone mockups */
+  video?: string;
 }
+
+/** Local demo reels under public/assets/videos */
+export const siteVideos = {
+  hero: assetUrl("/assets/videos/Tapsy-video-1.mp4"),
+  beforeAfter: assetUrl("/assets/videos/tapsy-video-2.mp4"),
+  orbit: assetUrl("/assets/videos/Tapsy-video-3.mp4"),
+  studio: assetUrl("/assets/videos/Tapsy-video-4.mp4"),
+  /** Publish board — distinct from hero reel */
+  publish: assetUrl("/assets/videos/tapsy-video-2.mp4"),
+  stack: [
+    assetUrl("/assets/videos/Tapsy-video-1.mp4"),
+    assetUrl("/assets/videos/tapsy-video-2.mp4"),
+    assetUrl("/assets/videos/Tapsy-video-3.mp4"),
+    assetUrl("/assets/videos/Tapsy-video-4.mp4"),
+  ],
+} as const;
 
 export const siteLinks = {
   appStore: "https://apps.apple.com/in/app/tapsy-brand-review/id6754841809",
@@ -44,7 +62,7 @@ export const siteContent = {
     titlePrimary: "Why type when you can",
     titleGradient: "tap?",
     description:
-      "Forget outdated text reviews and fake 5-star ratings. Tapsy delivers authentic 30-second video takes for restaurants, gyms, hotels, salons, nightlife — raw reactions, real vibes, zero fluff.",
+      "Forget outdated text reviews and fake 5-star ratings. Tapsy delivers authentic 30 seconds video takes for restaurants, gyms, hotels, salons, nightlife, raw reactions, real vibes, zero fluff.",
     ctaPrimary: "Get the app",
     ctaSecondary: "See how it works",
     metrics: [
@@ -58,7 +76,7 @@ export const siteContent = {
     badge: "How it works",
     heading: "From tap to trusted take.",
     subheading:
-      "Three moments. Zero fluff. Watch the product move as you scroll.",
+      "Three moments. Zero fluff. Watch the product move as you scroll — record, rate the vibe, then grow a following that trusts what you show.",
     steps: [
       {
         stepNumber: "01",
@@ -66,12 +84,14 @@ export const siteContent = {
         title: "Tap to record",
         subtitle: "30 seconds. One honest take.",
         details:
-          "Open the camera in a single tap. Capture the room, service, and energy in HD — no editing drama.",
+          "Open the camera in a single tap. Capture the room, service, plating, and energy in HD — no filters, no editing drama, just what it actually felt like being there.",
         bullets: [
           "Strict 30-second clip limit",
           "Tap-to-focus viewfinder",
           "Works offline until you post",
+          "Auto place detection when you’re on-site",
         ],
+        tip: "Keep the phone steady and talk naturally — authenticity beats polish.",
       },
       {
         stepNumber: "02",
@@ -79,12 +99,14 @@ export const siteContent = {
         title: "Slide the vibe",
         subtitle: "Okay → Outstanding.",
         details:
-          "Skip confusing star math. Drag the mood slider, drop a tag, and publish your take instantly.",
+          "Skip confusing star math. Drag the mood slider, drop a tag for food, service, or ambience, and publish your take instantly so people nearby can decide with confidence.",
         bullets: [
           "Sensory vibe slider",
           "Smart geo + category tags",
           "One-tap publish",
+          "Instant feed + map visibility",
         ],
+        tip: "A clear vibe + one strong clip beats a long written review every time.",
       },
       {
         stepNumber: "03",
@@ -92,12 +114,14 @@ export const siteContent = {
         title: "Get social",
         subtitle: "Become the trusted voice.",
         details:
-          "Build a following of foodies and explorers. Earn badges. Help your city discover better nights out.",
+          "Build a following of foodies and explorers who trust your eye. Earn badges, climb neighborhood ranks, and help your city discover better nights out — from one honest reel.",
         bullets: [
           "Creator profile & badges",
           "Neighborhood reputation",
           "Share to every feed",
+          "Followers who act on your takes",
         ],
+        tip: "Consistency compounds — a few real reviews a week builds trust fast.",
       },
     ],
   },
@@ -203,6 +227,7 @@ export const siteContent = {
         "https://images.unsplash.com/photo-1473093295043-cdd812d0e601?auto=format&fit=crop&w=900&q=80",
       rating: 5.0,
       duration: "0:28",
+      video: assetUrl("/assets/videos/Tapsy-video-1.mp4"),
     },
     {
       id: "v2",
@@ -212,6 +237,7 @@ export const siteContent = {
       image: assetUrl("/assets/cafe-vibe.jpg"),
       rating: 4.9,
       duration: "0:22",
+      video: assetUrl("/assets/videos/tapsy-video-2.mp4"),
     },
     {
       id: "v3",
@@ -221,6 +247,7 @@ export const siteContent = {
       image: assetUrl("/assets/nightlife-vibe.jpg"),
       rating: 4.8,
       duration: "0:30",
+      video: assetUrl("/assets/videos/Tapsy-video-3.mp4"),
     },
     {
       id: "v4",
@@ -231,6 +258,7 @@ export const siteContent = {
         "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=900&q=80",
       rating: 4.9,
       duration: "0:25",
+      video: assetUrl("/assets/videos/Tapsy-video-4.mp4"),
     },
     {
       id: "v5",

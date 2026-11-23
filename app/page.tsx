@@ -26,11 +26,11 @@ export default function Home() {
       <ScrollySteps />
       <SpreadScene />
       <BeforeAfter />
-      <DownloadCTA />
       <AppShowcase />
       <BentoFeatures />
       <OrbitShowcase />
       <Testimonials />
+      <DownloadCTA />
       <Pricing />
       <FaqContact />
       <TrustBanner />

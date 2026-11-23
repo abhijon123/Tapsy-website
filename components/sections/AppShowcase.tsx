@@ -3,16 +3,18 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
-import { Play, Star } from "lucide-react";
+import { Star } from "lucide-react";
 import { siteContent } from "@/lib/content";
 import { Reveal } from "@/components/ui/reveal";
 import { StudioBoard } from "@/components/sections/StudioBoard";
+import { PhoneVideo } from "@/components/ui/phone-video";
+import { AppBottomNav, AppTopBar } from "@/components/ui/app-chrome";
 import { cn } from "@/lib/utils";
 
-const STACK = siteContent.venues.slice(0, 5);
+const STACK = siteContent.venues.slice(0, 4);
 const N = STACK.length;
-const AUTO_MS = 2000;
-const RESUME_MS = 8000;
+const AUTO_MS = 5500;
+const RESUME_MS = 10000;
 
 /** Shortest signed circular distance from `from` → `to` on a ring of size N */
 function circularOffset(from: number, to: number) {
@@ -22,14 +24,14 @@ function circularOffset(from: number, to: number) {
   return d;
 }
 
-/** link.me-style ring — original size; active phone always on top */
+/** Ring layout — lighter 3D (less rotateY) so active reel stays smooth */
 function ringStyle(offset: number) {
   const abs = Math.abs(offset);
   if (abs > 2) {
     return {
       x: offset > 0 ? 180 : -180,
       scale: 0.58,
-      rotateY: offset > 0 ? -12 : 12,
+      rotateY: 0,
       z: -120,
       opacity: 0,
       zIndex: 1,
@@ -42,7 +44,7 @@ function ringStyle(offset: number) {
     return {
       x: offset > 0 ? 118 : -118,
       scale: 0.84,
-      rotateY: offset > 0 ? -12 : 12,
+      rotateY: offset > 0 ? -6 : 6,
       z: -40,
       opacity: 1,
       zIndex: 30,
@@ -51,7 +53,7 @@ function ringStyle(offset: number) {
   return {
     x: offset > 0 ? 190 : -190,
     scale: 0.7,
-    rotateY: offset > 0 ? -14 : 14,
+    rotateY: offset > 0 ? -8 : 8,
     z: -80,
     opacity: 0.95,
     zIndex: 20,
@@ -153,17 +155,13 @@ export function AppShowcase() {
               {items.map(({ venue, index, offset }) => {
                 const style = ringStyle(offset);
                 const isActive = offset === 0;
+                const phoneWidth = "w-[min(210px,38vw)] sm:w-[230px] lg:w-[252px]";
 
                 return (
-                  <motion.button
+                  <motion.div
                     key={venue.id}
-                    type="button"
-                    aria-label={`Focus ${venue.title}`}
-                    aria-pressed={isActive}
-                    onClick={() => focusPhone(index)}
                     className={cn(
-                      "absolute left-0 top-0 origin-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-fuchsia-400",
-                      isActive ? "cursor-default" : "cursor-pointer",
+                      "absolute left-0 top-0 origin-center",
                       Math.abs(offset) > 2 && "pointer-events-none"
                     )}
                     style={{ zIndex: style.zIndex }}
@@ -177,47 +175,55 @@ export function AppShowcase() {
                       zIndex: style.zIndex,
                     }}
                     transition={{
-                      duration: 0.85,
-                      ease: [0.65, 0, 0.35, 1],
+                      duration: 0.55,
+                      ease: [0.22, 1, 0.36, 1],
                     }}
                   >
-                    <div
-                      className={cn(
-                        "hero-phone aspect-[9/19.2] w-[min(210px,38vw)] sm:w-[230px] lg:w-[252px]",
-                        isActive
-                          ? "shadow-[0_28px_60px_-18px_rgba(0,0,0,0.55)] ring-2 ring-white/40"
-                          : "shadow-lg"
-                      )}
-                    >
-                      <div className="hero-phone-screen">
-                        <Image
-                          src={venue.image}
-                          alt={venue.title}
-                          fill
-                          className="object-cover"
-                          sizes="252px"
-                          priority={isActive}
-                        />
-                        <div
-                          className={cn(
-                            "absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-black/15",
-                            !isActive && "bg-black/25"
-                          )}
-                        />
-                        {isActive && (
-                          <div className="absolute inset-0 flex items-center justify-center">
-                            <span className="flex h-11 w-11 items-center justify-center rounded-full bg-white/20 text-white backdrop-blur-md">
-                              <Play className="h-4 w-4 fill-white" />
-                            </span>
-                          </div>
+                    {isActive && venue.video ? (
+                      <PhoneVideo
+                        src={venue.video}
+                        poster={venue.image}
+                        title={venue.title}
+                        place={venue.place}
+                        widthClassName={cn(
+                          phoneWidth,
+                          "shadow-[0_28px_60px_-18px_rgba(0,0,0,0.55)] ring-2 ring-white/40"
                         )}
-                        <div className="absolute bottom-0 left-0 right-0 p-3 text-left">
-                          <p className="truncate text-[12px] font-bold text-white">{venue.title}</p>
-                          <p className="truncate text-[10px] text-white/70">{venue.place}</p>
+                        autoPlay
+                        muted
+                        loop
+                        playSize="sm"
+                      />
+                    ) : (
+                      <button
+                        type="button"
+                        aria-label={`Focus ${venue.title}`}
+                        onClick={() => focusPhone(index)}
+                        className="cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-fuchsia-400"
+                      >
+                        <div className={cn("hero-phone aspect-[9/19.2] shadow-lg", phoneWidth)}>
+                          <div className="hero-phone-screen">
+                            <Image
+                              src={venue.image}
+                              alt={venue.title}
+                              fill
+                              className="object-cover"
+                              sizes="252px"
+                            />
+                            <div className="absolute inset-0 bg-black/25 bg-gradient-to-t from-black/75 via-transparent to-transparent" />
+                            <AppTopBar />
+                            <AppBottomNav />
+                            <div className="absolute bottom-[54px] left-0 right-0 p-3 text-left">
+                              <p className="truncate text-[12px] font-bold text-white">
+                                {venue.title}
+                              </p>
+                              <p className="truncate text-[10px] text-white/70">{venue.place}</p>
+                            </div>
+                          </div>
                         </div>
-                      </div>
-                    </div>
-                  </motion.button>
+                      </button>
+                    )}
+                  </motion.div>
                 );
               })}
             </div>

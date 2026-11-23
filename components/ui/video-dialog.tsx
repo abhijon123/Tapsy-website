@@ -1,26 +1,29 @@
 "use client";
 
-import { useEffect } from "react";
-import Image from "next/image";
+import { useEffect, useRef } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { X, Play } from "lucide-react";
+import { X } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 type VideoDialogProps = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   title?: string;
-  posterSrc: string;
+  videoSrc: string;
+  posterSrc?: string;
   className?: string;
 };
 
 export function VideoDialog({
   open,
   onOpenChange,
-  title = "Bella Vista · 30s take",
+  title = "Tapsy · video take",
+  videoSrc,
   posterSrc,
   className,
 }: VideoDialogProps) {
+  const videoRef = useRef<HTMLVideoElement>(null);
+
   useEffect(() => {
     if (!open) return;
     const onKey = (e: KeyboardEvent) => {
@@ -28,11 +31,19 @@ export function VideoDialog({
     };
     document.body.style.overflow = "hidden";
     window.addEventListener("keydown", onKey);
+
+    const el = videoRef.current;
+    if (el) {
+      el.currentTime = 0;
+      void el.play().catch(() => {});
+    }
+
     return () => {
       document.body.style.overflow = "";
       window.removeEventListener("keydown", onKey);
+      el?.pause();
     };
-  }, [open, onOpenChange]);
+  }, [open, onOpenChange, videoSrc]);
 
   return (
     <AnimatePresence>
@@ -73,18 +84,14 @@ export function VideoDialog({
               </button>
             </div>
             <div className="relative aspect-[9/16] bg-black">
-              <Image src={posterSrc} alt="" fill className="object-cover" sizes="400px" />
-              <div className="absolute inset-0 flex items-center justify-center bg-black/25">
-                <div className="flex h-16 w-16 items-center justify-center rounded-full bg-gradient-tapsy text-white shadow-lg">
-                  <Play className="h-7 w-7 fill-white pl-0.5" />
-                </div>
-              </div>
-              <div className="absolute bottom-4 left-4 right-4 rounded-2xl bg-black/55 p-3 text-white backdrop-blur-md">
-                <p className="text-[13px] font-semibold">Mark Jacob · Verified</p>
-                <p className="mt-1 text-[12px] text-white/70">
-                  Amazing authentic Italian — pasta was perfect.
-                </p>
-              </div>
+              <video
+                ref={videoRef}
+                src={videoSrc}
+                poster={posterSrc}
+                controls
+                playsInline
+                className="absolute inset-0 h-full w-full object-cover"
+              />
             </div>
           </motion.div>
         </motion.div>
