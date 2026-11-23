@@ -1,24 +1,126 @@
 "use client";
 
-import { useState } from "react";
-import Image from "next/image";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Type, Video } from "lucide-react";
 import { WordsPullUp } from "@/components/ui/words-pull-up";
 import { BlurFade } from "@/components/ui/blur-fade";
-import { useSectionParallax } from "@/hooks/useParallax";
+import { TapsyPlayButton } from "@/components/ui/tapsy-play-button";
 import { cn, assetUrl } from "@/lib/utils";
+import { siteVideos } from "@/lib/content";
+
+function BannerVideo() {
+  const rootRef = useRef<HTMLDivElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const wantPlay = useRef(true);
+  const inView = useRef(false);
+  const [pausedUI, setPausedUI] = useState(false);
+
+  const sync = useCallback(() => {
+    const el = videoRef.current;
+    if (!el) return;
+    if (wantPlay.current && inView.current) {
+      void el.play().then(() => setPausedUI(false)).catch(() => setPausedUI(true));
+    } else {
+      el.pause();
+      setPausedUI(true);
+    }
+  }, []);
+
+  useEffect(() => {
+    const root = rootRef.current;
+    if (!root) return;
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        inView.current = entry.isIntersecting && entry.intersectionRatio >= 0.3;
+        sync();
+      },
+      { threshold: [0, 0.3, 0.6], rootMargin: "60px 0px" }
+    );
+    io.observe(root);
+    return () => {
+      io.disconnect();
+      videoRef.current?.pause();
+    };
+  }, [sync]);
+
+  const toggle = () => {
+    wantPlay.current = !wantPlay.current;
+    sync();
+  };
+
+  return (
+    <div
+      ref={rootRef}
+      className="group relative w-full overflow-hidden rounded-[28px] bg-zinc-950 shadow-[0_24px_60px_-28px_rgba(124,58,237,0.45)]"
+    >
+      {/* Match Download CTA banner proportions */}
+      <div className="relative min-h-[320px] w-full sm:min-h-[380px] lg:min-h-[420px]">
+        <video
+          ref={videoRef}
+          src={siteVideos.beforeAfter}
+          poster={assetUrl("/assets/app-reel-bellavista.png")}
+          muted
+          loop
+          playsInline
+          preload="metadata"
+          className="absolute inset-0 h-full w-full object-cover [transform:translateZ(0)]"
+          onPlaying={() => setPausedUI(false)}
+        />
+
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/15" />
+
+        <div className="absolute left-4 top-4 z-20 flex items-center gap-2 sm:left-6 sm:top-6">
+          <span className="inline-flex items-center gap-1.5 rounded-full bg-black/50 px-2.5 py-1 text-[11px] font-semibold text-white">
+            <span className="live-dot h-1.5 w-1.5 rounded-full bg-red-500" />
+            Live take
+          </span>
+          <span className="rounded-full bg-gradient-tapsy px-2.5 py-1 text-[11px] font-bold text-white">
+            Verified visit
+          </span>
+        </div>
+
+        <button
+          type="button"
+          onClick={toggle}
+          className="absolute inset-0 z-10 flex items-center justify-center"
+          aria-label={pausedUI ? "Play video" : "Pause video"}
+        >
+          <span
+            className={cn(
+              "transition-opacity duration-200",
+              pausedUI
+                ? "opacity-100"
+                : "opacity-0 group-hover:opacity-100 group-focus-within:opacity-100"
+            )}
+          >
+            <TapsyPlayButton playing={!pausedUI} size="lg" />
+          </span>
+        </button>
+
+        <div className="pointer-events-none absolute bottom-5 left-5 right-5 z-20 sm:bottom-7 sm:left-7 sm:right-7">
+          <p className="text-[18px] font-bold text-white sm:text-[20px]">Real venue. Real take.</p>
+          <p className="mt-1 text-[13px] text-white/75 sm:text-[14px]">
+            See the room. Hear the buzz. Know before you go.
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 export function BeforeAfter() {
   const [mode, setMode] = useState<"text" | "video">("video");
-  const { ref, y } = useSectionParallax(0.06);
 
   return (
     <section className="site-section bg-zinc-50">
       <div className="site-rail">
         <BlurFade className="mx-auto max-w-2xl text-center">
           <h2 className="type-section text-foreground">
-            <WordsPullUp text="Same place. Totally different trust." className="justify-center" />
+            <WordsPullUp
+              text="Same place. Totally different trust."
+              className="justify-center !flex-nowrap whitespace-nowrap"
+            />
           </h2>
           <p className="type-lead mx-auto mt-3">
             Reading “great vibes” is guesswork. Watching a 30-second take is proof.
@@ -48,7 +150,7 @@ export function BeforeAfter() {
           </button>
         </div>
 
-        <div className="relative mx-auto mt-8 max-w-3xl">
+        <div className="relative mt-8 w-full">
           <AnimatePresence mode="wait">
             {mode === "text" ? (
               <motion.article
@@ -57,7 +159,7 @@ export function BeforeAfter() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -10 }}
                 transition={{ duration: 0.28, ease: "easeOut" }}
-                className="rounded-[28px] bg-white p-6 shadow-[0_24px_60px_-32px_rgba(15,10,40,0.3)] sm:p-8"
+                className="w-full rounded-[28px] bg-white p-6 shadow-[0_24px_60px_-32px_rgba(15,10,40,0.3)] sm:p-8 lg:p-10"
               >
                 <div className="flex items-center justify-between gap-3">
                   <div>
@@ -68,7 +170,7 @@ export function BeforeAfter() {
                     Text wall
                   </span>
                 </div>
-                <p className="mt-5 text-[15px] leading-relaxed text-zinc-500">
+                <p className="mt-5 max-w-3xl text-[15px] leading-relaxed text-zinc-500 sm:text-[16px]">
                   Food was good. Service was nice. Ambience was great. Would recommend to friends
                   and family. Parking was okay. Wait time was fine. Pasta was delicious. Overall a
                   solid experience if you like Italian…
@@ -78,44 +180,16 @@ export function BeforeAfter() {
                 </p>
               </motion.article>
             ) : (
-              <motion.article
+              <motion.div
                 key="video"
                 initial={{ opacity: 0, y: 14 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -10 }}
                 transition={{ duration: 0.28, ease: "easeOut" }}
-                className="overflow-hidden rounded-[28px] bg-zinc-950 shadow-[0_24px_60px_-28px_rgba(124,58,237,0.45)]"
+                className="w-full"
               >
-                <div ref={ref} className="relative aspect-[16/10] overflow-hidden">
-                  <div
-                    className="absolute inset-[-10%] will-change-transform"
-                    style={{ transform: `translate3d(0, ${y}px, 0)` }}
-                  >
-                    <Image
-                      src={assetUrl("/assets/app-reel-bellavista.png")}
-                      alt="Tapsy video review of Bella Vista"
-                      fill
-                      className="phone-media"
-                    />
-                  </div>
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/20" />
-                  <div className="absolute left-4 top-4 flex items-center gap-2">
-                    <span className="inline-flex items-center gap-1.5 rounded-full bg-black/50 px-2.5 py-1 text-[11px] font-semibold text-white">
-                      <span className="live-dot h-1.5 w-1.5 rounded-full bg-red-500" />
-                      Live take · 0:28
-                    </span>
-                    <span className="rounded-full bg-gradient-tapsy px-2.5 py-1 text-[11px] font-bold text-white">
-                      Verified visit
-                    </span>
-                  </div>
-                  <div className="absolute bottom-4 left-4 right-4">
-                    <p className="text-[18px] font-bold text-white">Handmade pappardelle</p>
-                    <p className="text-[13px] text-white/75">
-                      See the room. Hear the buzz. Know before you go.
-                    </p>
-                  </div>
-                </div>
-              </motion.article>
+                <BannerVideo />
+              </motion.div>
             )}
           </AnimatePresence>
         </div>

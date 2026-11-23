@@ -51,9 +51,19 @@ export function ScrollySteps() {
         : { text: "Outstanding", color: "text-violet-300" };
 
   return (
-    <section id="how-it-works" className="site-section relative bg-background">
-      <div className="site-rail">
-        <Reveal className="mx-auto mb-8 max-w-2xl text-center">
+    <section id="how-it-works" className="site-section relative overflow-hidden bg-background">
+      {/* Soft full-bleed wash — atmosphere instead of empty white */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0"
+        style={{
+          background:
+            "radial-gradient(ellipse 70% 55% at 70% 55%, rgba(217,70,239,0.07), transparent 60%), radial-gradient(ellipse 55% 50% at 18% 40%, rgba(124,58,237,0.06), transparent 55%), radial-gradient(ellipse 80% 40% at 50% 100%, rgba(251,146,60,0.04), transparent 50%)",
+        }}
+      />
+
+      <div className="relative mx-auto w-full max-w-[1400px] px-5 sm:px-8 lg:px-10">
+        <Reveal className="mx-auto mb-6 max-w-2xl text-center sm:mb-7">
           <h2 className="type-section text-foreground">
             <span className="block">From tap to</span>
             <span className="block whitespace-nowrap italic text-gradient-tapsy">
@@ -65,10 +75,10 @@ export function ScrollySteps() {
           </p>
         </Reveal>
 
-        {/* Compact auto-playing stage — no 280vh scroll gap */}
+        {/* Compact auto-playing stage — wider, denser composition */}
         <div className="relative">
           <div className="flex items-center">
-            <div className="mx-auto grid w-full grid-cols-1 items-center gap-8 lg:grid-cols-2 lg:gap-14">
+            <div className="mx-auto grid w-full grid-cols-1 items-center gap-7 lg:grid-cols-2 lg:gap-8 xl:gap-10">
             {/* Left: step copy driven by scroll */}
             <div className="relative order-2 lg:order-1">
               <AnimatePresence mode="wait">
@@ -104,18 +114,22 @@ export function ScrollySteps() {
                       </li>
                     ))}
                   </ul>
+                  <p className="mt-5 max-w-md text-[13px] leading-relaxed text-zinc-500">
+                    <span className="font-semibold text-zinc-700">Tip — </span>
+                    {stepsIntro.steps[activeStep].tip}
+                  </p>
                 </motion.div>
               </AnimatePresence>
 
               {/* Autoplay progress + step dots */}
-              <div className="mt-8 h-1 w-40 overflow-hidden rounded-full bg-zinc-200">
+              <div className="mt-6 h-1 w-40 overflow-hidden rounded-full bg-zinc-200">
                 <div
                   key={activeStep}
                   className="fill-bar h-full bg-gradient-tapsy"
                   style={{ animationDuration: "6.5s" }}
                 />
               </div>
-              <div className="mt-4 flex items-center gap-3">
+              <div className="mt-3 flex items-center gap-3">
                 {stepsIntro.steps.map((step, idx) => (
                   <button
                     key={step.stepNumber}
@@ -134,9 +148,9 @@ export function ScrollySteps() {
               </div>
             </div>
 
-            {/* Right: sticky phone demo */}
-            <div className="order-1 flex justify-center lg:order-2">
-              <div className="phone-frame aspect-[9/18.5] w-[280px] sm:w-[310px]">
+            {/* Right: phone demo */}
+            <div className="order-1 flex justify-center lg:order-2 lg:justify-end">
+              <div className="phone-frame aspect-[9/18.5] w-[250px] sm:w-[270px] lg:w-[290px]">
                 <div className="absolute left-1/2 top-5 z-30 h-4 w-20 -translate-x-1/2 rounded-full bg-black" />
                 <div className="phone-screen flex flex-col p-4 text-white">
                   <AnimatePresence mode="wait">

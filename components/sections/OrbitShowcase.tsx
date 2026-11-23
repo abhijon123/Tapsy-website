@@ -1,7 +1,7 @@
 "use client";
 
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import { motion } from "framer-motion";
 import {
   Star,
   Utensils,
@@ -13,34 +13,41 @@ import {
   Share2,
 } from "lucide-react";
 import { WordsPullUp } from "@/components/ui/words-pull-up";
+import { PhoneVideo } from "@/components/ui/phone-video";
 import { cn, assetUrl } from "@/lib/utils";
+import { siteVideos } from "@/lib/content";
 
 function Drift({
   children,
   className,
-  x = 14,
-  duration = 5.5,
+  /** Closer peak (toward phone) — keep modest so it touches, never crosses */
+  xIn = 10,
+  /** Farther rest position (away from phone) */
+  xOut = -24,
+  duration = 3.2,
   delay = 0,
 }: {
   children: React.ReactNode;
   className?: string;
-  x?: number;
+  xIn?: number;
+  xOut?: number;
   duration?: number;
   delay?: number;
 }) {
   return (
-    <motion.div
-      className={cn("w-full", className)}
-      animate={{ x: [0, x, 0] }}
-      transition={{
-        duration,
-        delay,
-        repeat: Infinity,
-        ease: "easeInOut",
-      }}
+    <div
+      className={cn("orbit-drift w-full", className)}
+      style={
+        {
+          "--drift-in": `${xIn}px`,
+          "--drift-out": `${xOut}px`,
+          "--drift-dur": `${duration}s`,
+          "--drift-delay": `${delay}s`,
+        } as React.CSSProperties
+      }
     >
       {children}
-    </motion.div>
+    </div>
   );
 }
 
@@ -65,8 +72,29 @@ const gallery = [
 ];
 
 export function OrbitShowcase() {
+  const sectionRef = useRef<HTMLElement>(null);
+  const [active, setActive] = useState(false);
+
+  // Pause floating cards + unload reel decode when section is off-screen
+  useEffect(() => {
+    const el = sectionRef.current;
+    if (!el) return;
+    const io = new IntersectionObserver(
+      ([entry]) => setActive(entry.isIntersecting && entry.intersectionRatio > 0.15),
+      { threshold: [0, 0.15, 0.4] }
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
   return (
-    <section className="site-section relative overflow-hidden bg-white">
+    <section
+      ref={sectionRef}
+      className={cn(
+        "site-section relative overflow-hidden bg-white",
+        !active && "[&_.orbit-drift]:![animation-play-state:paused]"
+      )}
+    >
       <div className="site-rail">
         <div className="mx-auto mb-10 max-w-2xl text-center sm:mb-14">
           <h2 className="type-section text-zinc-950">
@@ -77,16 +105,15 @@ export function OrbitShowcase() {
           </p>
         </div>
 
-        {/* 3-column stage: left cards | phone | right cards — guaranteed gap */}
-        <div className="relative mx-auto grid w-full items-center gap-6 sm:gap-8 lg:grid-cols-[minmax(0,1fr)_280px_minmax(0,1fr)] lg:gap-12">
+        <div className="relative mx-auto grid w-full items-center gap-6 sm:gap-8 lg:grid-cols-[minmax(0,1fr)_260px_minmax(0,1fr)] lg:gap-12 xl:gap-16">
           <div
             aria-hidden
             className="pointer-events-none absolute left-1/2 top-1/2 hidden h-[70%] w-[40%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,rgba(217,70,239,0.07),transparent_70%)] lg:block"
           />
 
-          {/* LEFT — drifts left/right, never overlaps phone */}
-          <div className="relative z-20 hidden flex-col justify-center gap-5 lg:flex">
-            <Drift x={-12} duration={5.2} delay={0.1} className="max-w-[270px]">
+          {/* LEFT — rest farther out, glide in to touch, pull back */}
+          <div className="relative z-10 hidden flex-col items-end justify-center gap-4 lg:flex">
+            <Drift xIn={12} xOut={-26} duration={3} delay={0} className="max-w-[270px]">
               <div className="rounded-2xl bg-white p-3.5 shadow-[0_18px_40px_-20px_rgba(15,10,40,0.28)] ring-1 ring-zinc-100">
                 <div className="flex gap-3">
                   <div className="relative h-14 w-12 shrink-0 overflow-hidden rounded-xl">
@@ -111,8 +138,8 @@ export function OrbitShowcase() {
               </div>
             </Drift>
 
-            <div className="flex max-w-[270px] gap-3">
-              <Drift x={10} duration={4.8} delay={0.3} className="w-[88px] shrink-0">
+            <div className="flex max-w-[270px] justify-end gap-3">
+              <Drift xIn={10} xOut={-22} duration={2.8} delay={0.15} className="w-[88px] shrink-0">
                 <div className="flex h-[88px] w-[88px] flex-col items-center justify-center rounded-2xl bg-white shadow-[0_16px_36px_-18px_rgba(15,10,40,0.28)] ring-1 ring-zinc-100">
                   <p className="text-[11px] font-medium text-zinc-400">Avg rating</p>
                   <p className="mt-1 text-[22px] font-extrabold tracking-tight text-zinc-900">
@@ -120,7 +147,7 @@ export function OrbitShowcase() {
                   </p>
                 </div>
               </Drift>
-              <Drift x={-14} duration={5.6} delay={0.5} className="w-[88px] shrink-0">
+              <Drift xIn={14} xOut={-28} duration={3.1} delay={0.3} className="w-[88px] shrink-0">
                 <div className="flex h-[88px] w-[88px] flex-col items-center justify-center rounded-2xl bg-white shadow-[0_16px_36px_-18px_rgba(15,10,40,0.28)] ring-1 ring-zinc-100">
                   <p className="text-[11px] font-medium text-zinc-400">Reviews</p>
                   <p className="mt-1 text-[22px] font-extrabold tracking-tight text-zinc-900">
@@ -130,7 +157,7 @@ export function OrbitShowcase() {
               </Drift>
             </div>
 
-            <Drift x={12} duration={6} delay={0.2} className="max-w-[240px]">
+            <Drift xIn={11} xOut={-24} duration={3.3} delay={0.1} className="max-w-[240px]">
               <div className="rounded-2xl bg-white p-3.5 shadow-[0_18px_40px_-20px_rgba(15,10,40,0.28)] ring-1 ring-zinc-100">
                 <p className="text-[12px] font-semibold text-zinc-800">Weekly trend</p>
                 <svg viewBox="0 0 180 64" className="mt-2 h-14 w-full" aria-hidden>
@@ -156,7 +183,7 @@ export function OrbitShowcase() {
               </div>
             </Drift>
 
-            <Drift x={-10} duration={4.6} delay={0.4} className="max-w-[240px]">
+            <Drift xIn={12} xOut={-25} duration={2.9} delay={0.25} className="max-w-[240px]">
               <div className="rounded-2xl bg-white px-4 py-3.5 shadow-[0_18px_40px_-20px_rgba(15,10,40,0.28)] ring-1 ring-zinc-100">
                 <div className="flex items-center justify-between text-[12px]">
                   <span className="font-semibold text-zinc-800">Excellent</span>
@@ -173,31 +200,24 @@ export function OrbitShowcase() {
             </Drift>
           </div>
 
-          {/* CENTER phone */}
-          <div className="relative z-10 mx-auto w-[210px] sm:w-[240px] lg:w-[260px]">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.35 }}
-              transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-            >
-              <div className="hero-phone aspect-[9/19.2]">
-                <div className="hero-phone-screen">
-                  <Image
-                    src={assetUrl("/assets/app-reel-bellavista.png")}
-                    alt="Tapsy video review"
-                    fill
-                    sizes="260px"
-                    className="phone-media"
-                  />
-                </div>
-              </div>
-            </motion.div>
+          {/* CENTER phone stays above side cards so nothing covers the reel */}
+          <div className="relative z-30 mx-auto w-[210px] sm:w-[240px] lg:w-[260px]">
+            <PhoneVideo
+              src={siteVideos.orbit}
+              poster={assetUrl("/assets/app-reel-bellavista.png")}
+              title="Tapsy video take"
+              place="Verified visit"
+              widthClassName="w-full"
+              autoPlay
+              muted
+              loop
+              playSize="sm"
+            />
           </div>
 
-          {/* RIGHT — drifts left/right, never overlaps phone */}
-          <div className="relative z-20 hidden flex-col items-end justify-center gap-5 lg:flex">
-            <Drift x={14} duration={5.4} delay={0.15} className="max-w-[280px]">
+          {/* RIGHT — rest farther out, glide in to touch, pull back */}
+          <div className="relative z-10 hidden flex-col items-start justify-center gap-4 lg:flex">
+            <Drift xIn={-12} xOut={26} duration={3} delay={0.05} className="max-w-[280px]">
               <div className="rounded-2xl bg-white p-3 shadow-[0_18px_40px_-20px_rgba(15,10,40,0.28)] ring-1 ring-zinc-100">
                 <div className="grid grid-cols-4 gap-2">
                   {categories.map((c) => {
@@ -222,7 +242,7 @@ export function OrbitShowcase() {
               </div>
             </Drift>
 
-            <Drift x={-12} duration={5.8} delay={0.35} className="max-w-[260px]">
+            <Drift xIn={-11} xOut={24} duration={3.2} delay={0.2} className="max-w-[260px]">
               <div className="rounded-2xl bg-white p-3.5 shadow-[0_18px_40px_-20px_rgba(15,10,40,0.28)] ring-1 ring-zinc-100">
                 <p className="text-[12px] font-semibold leading-snug text-zinc-800">
                   How people search for spots like yours
@@ -243,7 +263,7 @@ export function OrbitShowcase() {
               </div>
             </Drift>
 
-            <Drift x={16} duration={6.2} delay={0.25} className="w-[120px]">
+            <Drift xIn={-14} xOut={28} duration={2.85} delay={0.15} className="w-[120px]">
               <div className="overflow-hidden rounded-[1.4rem] bg-[#111113] p-[5px] shadow-[0_22px_44px_-18px_rgba(0,0,0,0.45)]">
                 <div className="relative aspect-[9/16] overflow-hidden rounded-[1.15rem] bg-black">
                   <Image
@@ -257,7 +277,7 @@ export function OrbitShowcase() {
               </div>
             </Drift>
 
-            <Drift x={-10} duration={5.1} delay={0.45} className="max-w-[220px]">
+            <Drift xIn={-12} xOut={25} duration={3.15} delay={0.3} className="max-w-[220px]">
               <div className="rounded-2xl bg-white p-3 shadow-[0_18px_40px_-20px_rgba(15,10,40,0.28)] ring-1 ring-zinc-100">
                 <p className="mb-2 text-[12px] font-semibold text-zinc-800">My Gallery</p>
                 <div className="grid grid-cols-3 gap-1.5">
@@ -271,41 +291,36 @@ export function OrbitShowcase() {
             </Drift>
           </div>
 
-          {/* Tablet / mobile: cards below phone, still clear of it */}
           <div className="col-span-full mt-2 grid gap-3 sm:grid-cols-2 lg:hidden">
-            <Drift x={10} duration={5} className="max-w-none">
-              <div className="rounded-2xl bg-white p-3.5 shadow-md ring-1 ring-zinc-100">
-                <div className="flex items-center gap-2">
-                  <Star className="h-3.5 w-3.5 fill-amber-400 text-amber-400" />
-                  <p className="text-[13px] font-semibold text-zinc-800">4.5 avg · 250 reviews</p>
-                </div>
-                <p className="mt-2 text-[12px] text-zinc-500">
-                  “Best pasta in downtown. The vibe was unmatched.”
-                </p>
+            <div className="rounded-2xl bg-white p-3.5 shadow-md ring-1 ring-zinc-100">
+              <div className="flex items-center gap-2">
+                <Star className="h-3.5 w-3.5 fill-amber-400 text-amber-400" />
+                <p className="text-[13px] font-semibold text-zinc-800">4.5 avg · 250 reviews</p>
               </div>
-            </Drift>
-            <Drift x={-10} duration={5.4} delay={0.2} className="max-w-none">
-              <div className="rounded-2xl bg-white p-3.5 shadow-md ring-1 ring-zinc-100">
-                <div className="mb-2 flex flex-wrap gap-1.5">
-                  {tags.slice(0, 3).map((t) => (
-                    <span
-                      key={t.label}
-                      className={cn(
-                        "rounded-full px-2.5 py-1 text-[11px] font-semibold",
-                        t.tone
-                      )}
-                    >
-                      {t.label}
-                    </span>
-                  ))}
-                </div>
-                <div className="flex items-center gap-2 text-zinc-400">
-                  <Heart className="h-3.5 w-3.5 text-fuchsia-500" />
-                  <MessageCircle className="h-3.5 w-3.5" />
-                  <Share2 className="h-3.5 w-3.5" />
-                </div>
+              <p className="mt-2 text-[12px] text-zinc-500">
+                “Best pasta in downtown. The vibe was unmatched.”
+              </p>
+            </div>
+            <div className="rounded-2xl bg-white p-3.5 shadow-md ring-1 ring-zinc-100">
+              <div className="mb-2 flex flex-wrap gap-1.5">
+                {tags.slice(0, 3).map((t) => (
+                  <span
+                    key={t.label}
+                    className={cn(
+                      "rounded-full px-2.5 py-1 text-[11px] font-semibold",
+                      t.tone
+                    )}
+                  >
+                    {t.label}
+                  </span>
+                ))}
               </div>
-            </Drift>
+              <div className="flex items-center gap-2 text-zinc-400">
+                <Heart className="h-3.5 w-3.5 text-fuchsia-500" />
+                <MessageCircle className="h-3.5 w-3.5" />
+                <Share2 className="h-3.5 w-3.5" />
+              </div>
+            </div>
           </div>
         </div>
       </div>

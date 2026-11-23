@@ -85,7 +85,7 @@ function QuoteCard({ q }: { q: (typeof quotes)[number] }) {
 
 export function Testimonials() {
   return (
-    <section className="site-section bg-white">
+    <section id="testimonials" className="site-section bg-white">
       <div className="site-rail">
         <BlurFade className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
           <div className="max-w-xl">

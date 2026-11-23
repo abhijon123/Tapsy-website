@@ -86,33 +86,8 @@ export function CreatorRow() {
         </h2>
         <p className="type-lead mx-auto mt-4 text-center">
           Forget outdated text and long paragraphs. With Tapsy, recording a review is as easy as
-          hitting play — restaurants, gyms, hotels, salons, nightlife. One tap shares your take.
+          hitting play restaurants, gyms, hotels, salons, nightlife. One tap shares your take.
         </p>
-
-        <div className="mt-7 overflow-hidden">
-          <div className="live-ticker flex w-max gap-3">
-            {[...Array(2)].map((_, loop) => (
-              <div key={loop} className="flex gap-3">
-                {[
-                  "Maya tapped a take at Peak Fitness",
-                  "Verified visit · 0:28",
-                  "Leo is recording at Sky Lounge",
-                  "12 people nearby are watching now",
-                  "Jordan dropped Outstanding at Harbor House",
-                  "New reel · Studio 12 · salon vibe",
-                ].map((line) => (
-                  <span
-                    key={`${loop}-${line}`}
-                    className="inline-flex items-center gap-2 rounded-full bg-violet-50 px-3.5 py-1.5 text-[12px] font-semibold text-violet-700"
-                  >
-                    <span className="live-dot h-1.5 w-1.5 rounded-full bg-fuchsia-500" />
-                    {line}
-                  </span>
-                ))}
-              </div>
-            ))}
-          </div>
-        </div>
       </div>
 
       <div className="relative mt-10">

@@ -1,88 +1,136 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import Image from "next/image";
+import { useEffect, useRef, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import {
   Check,
   Scissors,
   Volume2,
   MapPin,
   ShieldCheck,
+  Video,
 } from "lucide-react";
 import { cn, assetUrl } from "@/lib/utils";
+import { siteVideos } from "@/lib/content";
+import { TapsyPlayButton } from "@/components/ui/tapsy-play-button";
+import { AppBottomNav, AppTopBar } from "@/components/ui/app-chrome";
 
-const steps = [
+type Mode = "auto" | "manual";
+
+const flow = [
+  {
+    id: "record",
+    label: "Record the take",
+    title: "One tap. You’re filming.",
+    detail: "Capture the vibe in a short reel — no setup, no CapCut.",
+    icon: Video,
+    badge: "REC",
+  },
   {
     id: "trim",
     label: "Smart trim",
-    detail: "Cut dead space · keep the punch",
+    title: "Dead space gone.",
+    detail: "Tapsy keeps the punch and cuts the silence for you.",
     icon: Scissors,
-    color: "from-violet-500 to-fuchsia-500",
+    badge: "Trim",
   },
   {
     id: "audio",
     label: "Audio clean",
-    detail: "Noise down · voice clear",
+    title: "Voice clear. Noise down.",
+    detail: "Room buzz drops so the reaction stays front and center.",
     icon: Volume2,
-    color: "from-fuchsia-500 to-pink-500",
+    badge: "Audio",
   },
   {
-    id: "geo",
+    id: "tags",
     label: "Geo + vibe tags",
-    detail: "Neighborhood · Outstanding",
+    title: "Place + vibe stamped.",
+    detail: "Neighborhood and mood tags ride with the clip automatically.",
     icon: MapPin,
-    color: "from-violet-600 to-indigo-500",
+    badge: "Tags",
   },
   {
     id: "verified",
-    label: "Verified badge",
-    detail: "NFC visit proof stamped",
+    label: "Verified + ready",
+    title: "Ready to post.",
+    detail: "Verified visit badge on. One take in — publish-ready out.",
     icon: ShieldCheck,
-    color: "from-emerald-500 to-teal-400",
+    badge: "Done",
   },
 ];
 
-type Mode = "auto" | "manual";
+const STEP_MS = 3200;
 
+/** Same reel stays looping; only overlays / active step change — like link.me */
 export function StudioBoard() {
   const [mode, setMode] = useState<Mode>("auto");
-  const [done, setDone] = useState<number[]>([]);
-  const [cycle, setCycle] = useState(0);
+  const [step, setStep] = useState(0);
+  const [paused, setPaused] = useState(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const rootRef = useRef<HTMLDivElement>(null);
+  const inView = useRef(true);
+  const active = flow[step];
+  const ActiveIcon = active.icon;
+
+  // Circulate steps while section is visible
+  useEffect(() => {
+    if (paused) return;
+    const id = window.setInterval(() => {
+      if (!inView.current) return;
+      setStep((s) => (s + 1) % flow.length);
+    }, STEP_MS);
+    return () => window.clearInterval(id);
+  }, [paused, mode]);
 
   useEffect(() => {
-    setDone([]);
-    const timers: number[] = [];
+    const el = rootRef.current;
+    if (!el) return;
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        inView.current = entry.isIntersecting;
+        const v = videoRef.current;
+        if (!v) return;
+        if (entry.isIntersecting) void v.play().catch(() => {});
+        else v.pause();
+      },
+      { threshold: 0.25 }
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
 
-    steps.forEach((_, i) => {
-      const t = window.setTimeout(() => {
-        setDone((prev) => (prev.includes(i) ? prev : [...prev, i]));
-      }, 500 + i * 750);
-      timers.push(t);
-    });
-
-    const loop = window.setTimeout(() => {
-      setCycle((c) => c + 1);
-    }, 500 + steps.length * 750 + 3200);
-    timers.push(loop);
-
-    return () => timers.forEach((t) => window.clearTimeout(t));
-  }, [cycle, mode]);
+  const toggleVideo = () => {
+    const v = videoRef.current;
+    if (!v) return;
+    if (v.paused) {
+      void v.play();
+      setPaused(false);
+    } else {
+      v.pause();
+      setPaused(true);
+    }
+  };
 
   return (
-    <div className="mt-14 rounded-[32px] bg-[#0a0a0f] px-5 py-10 text-white sm:px-8 sm:py-12">
+    <div
+      ref={rootRef}
+      className="mt-14 rounded-[32px] bg-[#0a0a0f] px-5 py-10 text-white sm:px-8 sm:py-12 lg:px-10"
+    >
       <div className="mx-auto mb-10 max-w-2xl text-center">
         <h3 className="text-[clamp(1.75rem,3.6vw,2.6rem)] font-bold tracking-[-0.035em] leading-[1.1]">
           <span className="block">Record in seconds.</span>
           <span className="block italic text-gradient-tapsy">Edit in zero.</span>
         </h3>
         <p className="mx-auto mt-3 max-w-md text-[15px] leading-relaxed text-white/55">
-          One take in. Tapsy finishes the polish — trim, clean audio, tags, and
-          verified badge — before you even leave the room.
+          One take circulates through the whole studio flow — trim, clean, tag, verify —
+          without leaving the reel.
         </p>
       </div>
 
-      <div className="site-rail grid items-center gap-10 lg:grid-cols-2 lg:gap-14">
-        <div>
+      <div className="grid items-center gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,280px)_minmax(0,1fr)] lg:gap-8 xl:gap-12">
+        {/* Left copy + toggle */}
+        <div className="order-2 lg:order-1">
           <div className="mb-5 inline-flex rounded-full bg-white/[0.06] p-1">
             {(
               [
@@ -92,9 +140,10 @@ export function StudioBoard() {
             ).map((opt) => (
               <button
                 key={opt.id}
+                type="button"
                 onClick={() => {
                   setMode(opt.id);
-                  setCycle((c) => c + 1);
+                  setStep(0);
                 }}
                 className={cn(
                   "rounded-full px-4 py-2 text-[13px] font-semibold transition",
@@ -108,24 +157,35 @@ export function StudioBoard() {
             ))}
           </div>
 
-          <h4 className="text-[clamp(1.35rem,2.5vw,1.75rem)] font-bold tracking-tight">
-            {mode === "auto"
-              ? "Studio finishes the take for you."
-              : "Tune every polish step yourself."}
-          </h4>
-          <p className="mt-3 max-w-md text-[15px] leading-relaxed text-white/55">
-            {mode === "auto"
-              ? "Hit stop recording. Tapsy runs trim, audio clean, geo tags, and verification in sequence — done before you post."
-              : "Flip each tool on or off. Same board, same speed, still one tap to publish when you’re ready."}
-          </p>
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={`${mode}-${active.id}`}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              transition={{ duration: 0.28 }}
+            >
+              <p className="text-[12px] font-semibold uppercase tracking-[0.14em] text-white/40">
+                {String(step + 1).padStart(2, "0")} / {String(flow.length).padStart(2, "0")}
+              </p>
+              <h4 className="mt-2 text-[clamp(1.4rem,2.6vw,1.9rem)] font-bold tracking-tight">
+                {active.title}
+              </h4>
+              <p className="mt-3 max-w-md text-[15px] leading-relaxed text-white/55">
+                {mode === "auto"
+                  ? active.detail
+                  : `${active.detail} Flip this step on or off — same reel, your call.`}
+              </p>
+            </motion.div>
+          </AnimatePresence>
 
-          <ul className="mt-6 space-y-3">
+          <ul className="mt-7 space-y-2.5">
             {[
+              "Same video all the way through the flow",
               "No CapCut. No exports. No waiting.",
-              "Live status as each polish step completes",
               "Verified visit badge rides with the clip",
             ].map((item) => (
-              <li key={item} className="flex items-center gap-2.5 text-[14px] text-white/80">
+              <li key={item} className="flex items-center gap-2.5 text-[14px] text-white/75">
                 <span className="flex h-5 w-5 items-center justify-center rounded-full bg-violet-500/20 text-violet-300">
                   <Check className="h-3 w-3" />
                 </span>
@@ -135,69 +195,207 @@ export function StudioBoard() {
           </ul>
         </div>
 
-        <div className="rounded-[28px] bg-white/[0.045] p-4 shadow-[0_30px_80px_-30px_rgba(0,0,0,0.7)] sm:p-5">
-          <div className="mb-4 flex items-center gap-3 rounded-2xl bg-black/35 p-3">
-            <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-xl">
-              <Image
-                src={assetUrl("/assets/app-reel-bellavista.png")}
-                alt="Your take"
-                fill
-                className="phone-media"
+        {/* Center phone — one circulating video */}
+        <div className="order-1 mx-auto w-[230px] sm:w-[250px] lg:order-2 lg:w-[260px]">
+          <div className="hero-phone aspect-[9/19.2] w-full shadow-[0_28px_60px_-18px_rgba(0,0,0,0.65)]">
+            <div className="hero-phone-screen group">
+              <video
+                ref={videoRef}
+                src={siteVideos.studio}
+                poster={assetUrl("/assets/app-reel-bellavista.png")}
+                muted
+                loop
+                playsInline
+                autoPlay
+                preload="metadata"
+                className="absolute inset-0 h-full w-full object-cover [transform:translateZ(0)]"
               />
-            </div>
-            <div className="min-w-0 flex-1">
-              <p className="text-[13px] font-semibold">Bella Vista · 0:28</p>
-              <p className="truncate text-[12px] text-white/50">
-                {mode === "auto"
-                  ? "Auto-polishing your take…"
-                  : "Applying selected studio tools…"}
-              </p>
-            </div>
-            <div className="rounded-full bg-gradient-tapsy px-3 py-1 text-[11px] font-bold">
-              Studio
+
+              <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
+
+              <AppTopBar />
+              <AppBottomNav />
+
+              {/* Step overlay chrome — video underneath never swaps */}
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={active.id}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.25 }}
+                  className="pointer-events-none absolute inset-0 z-10"
+                >
+                  {active.id === "record" && (
+                    <div className="absolute left-3 top-11 flex items-center gap-2">
+                      <span className="inline-flex items-center gap-1.5 rounded-full bg-red-500/90 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide">
+                        <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-white" />
+                        Rec
+                      </span>
+                      <span className="rounded-full bg-black/50 px-2 py-1 text-[10px] font-medium text-white/80">
+                        0:14
+                      </span>
+                    </div>
+                  )}
+
+                  {active.id === "trim" && (
+                    <div className="absolute inset-x-3 bottom-[4.5rem]">
+                      <div className="h-1.5 overflow-hidden rounded-full bg-white/20">
+                        <motion.div
+                          className="h-full rounded-full bg-gradient-tapsy"
+                          initial={{ width: "30%" }}
+                          animate={{ width: "72%" }}
+                          transition={{ duration: 1.4, ease: "easeOut" }}
+                        />
+                      </div>
+                      <p className="mt-2 text-center text-[10px] font-semibold text-white/70">
+                        Trimming dead space…
+                      </p>
+                    </div>
+                  )}
+
+                  {active.id === "audio" && (
+                    <div className="absolute inset-x-4 top-1/3 flex items-end justify-center gap-1">
+                      {Array.from({ length: 12 }).map((_, i) => (
+                        <motion.span
+                          key={i}
+                          className="w-1.5 rounded-full bg-gradient-to-t from-fuchsia-500 to-violet-400"
+                          animate={{ height: [10, 28 + (i % 4) * 6, 14] }}
+                          transition={{
+                            duration: 0.7,
+                            repeat: Infinity,
+                            delay: i * 0.05,
+                            ease: "easeInOut",
+                          }}
+                        />
+                      ))}
+                    </div>
+                  )}
+
+                  {active.id === "tags" && (
+                    <div className="absolute left-3 top-11 flex flex-wrap gap-1.5">
+                      <span className="rounded-full bg-white/15 px-2.5 py-1 text-[10px] font-semibold backdrop-blur-sm">
+                        Downtown
+                      </span>
+                      <span className="rounded-full bg-gradient-tapsy px-2.5 py-1 text-[10px] font-bold">
+                        Outstanding
+                      </span>
+                      <span className="rounded-full bg-white/15 px-2.5 py-1 text-[10px] font-semibold backdrop-blur-sm">
+                        Nightlife
+                      </span>
+                    </div>
+                  )}
+
+                  {active.id === "verified" && (
+                    <div className="absolute left-3 top-11 inline-flex items-center gap-1.5 rounded-full bg-emerald-500/90 px-2.5 py-1 text-[10px] font-bold">
+                      <ShieldCheck className="h-3 w-3" />
+                      Verified visit
+                    </div>
+                  )}
+
+                  <div className="absolute bottom-0 left-0 right-0 p-3">
+                    <div className="flex items-center gap-2">
+                      <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-gradient-tapsy">
+                        <ActiveIcon className="h-3.5 w-3.5" />
+                      </span>
+                      <div className="min-w-0">
+                        <p className="truncate text-[12px] font-bold">{active.badge}</p>
+                        <p className="truncate text-[10px] text-white/65">{active.label}</p>
+                      </div>
+                    </div>
+                  </div>
+                </motion.div>
+              </AnimatePresence>
+
+              <button
+                type="button"
+                onClick={toggleVideo}
+                className="absolute inset-0 z-20 flex items-center justify-center"
+                aria-label={paused ? "Play video" : "Pause video"}
+              >
+                <span
+                  className={cn(
+                    "transition-opacity duration-200",
+                    paused
+                      ? "opacity-100"
+                      : "opacity-0 group-hover:opacity-100"
+                  )}
+                >
+                  <TapsyPlayButton playing={!paused} size="sm" />
+                </span>
+              </button>
             </div>
           </div>
+        </div>
 
-          <p className="mb-3 text-[12px] font-medium text-white/45">
-            Polish steps on this take
+        {/* Right step rail — click to jump, auto circulates */}
+        <div className="order-3 space-y-2">
+          <p className="mb-3 text-[12px] font-medium text-white/40">
+            Same flow · one video
           </p>
-
-          <div className="space-y-2">
-            {steps.map((step, i) => {
-              const Icon = step.icon;
-              const isDone = done.includes(i);
-              return (
-                <div
-                  key={step.id}
+          {flow.map((item, i) => {
+            const Icon = item.icon;
+            const isActive = i === step;
+            const isPast = i < step;
+            return (
+              <button
+                key={item.id}
+                type="button"
+                onClick={() => {
+                  setStep(i);
+                  setPaused(false);
+                  void videoRef.current?.play();
+                }}
+                className={cn(
+                  "flex w-full items-center gap-3 rounded-2xl px-3 py-2.5 text-left transition",
+                  isActive
+                    ? "bg-violet-500/20 ring-1 ring-violet-400/30"
+                    : "bg-white/[0.035] hover:bg-white/[0.06]"
+                )}
+              >
+                <span
                   className={cn(
-                    "flex items-center gap-3 rounded-2xl bg-white/[0.035] px-3 py-2.5 transition-colors duration-300",
-                    isDone && "bg-violet-500/15"
+                    "flex h-9 w-9 shrink-0 items-center justify-center rounded-xl text-[12px] font-bold",
+                    isActive || isPast
+                      ? "bg-gradient-tapsy text-white"
+                      : "bg-white/10 text-white/45"
                   )}
-                  style={{ opacity: isDone ? 1 : 0.45 }}
                 >
-                  <div
-                    className={cn(
-                      "flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br text-white",
-                      step.color
-                    )}
-                  >
-                    <Icon className="h-4 w-4" />
-                  </div>
-                  <div className="min-w-0 flex-1">
-                    <p className="text-[13px] font-semibold">{step.label}</p>
-                    <p className="truncate text-[11px] text-white/45">{step.detail}</p>
-                  </div>
+                  {isPast && !isActive ? (
+                    <Check className="h-3.5 w-3.5" />
+                  ) : (
+                    <Icon className="h-3.5 w-3.5" />
+                  )}
+                </span>
+                <span className="min-w-0 flex-1">
                   <span
                     className={cn(
-                      "text-[11px] font-bold transition-colors",
-                      isDone ? "text-emerald-300" : "text-white/30"
+                      "block text-[13px] font-semibold",
+                      isActive ? "text-white" : "text-white/70"
                     )}
                   >
-                    {isDone ? "Done" : "…"}
+                    {item.label}
                   </span>
-                </div>
-              );
-            })}
+                  <span className="block truncate text-[11px] text-white/40">
+                    {item.detail}
+                  </span>
+                </span>
+                <span className="text-[11px] font-bold text-white/30">
+                  {String(i + 1).padStart(2, "0")}
+                </span>
+              </button>
+            );
+          })}
+
+          {/* Progress bar for current step */}
+          <div className="mt-3 h-1 overflow-hidden rounded-full bg-white/10">
+            <motion.div
+              key={step}
+              className="h-full rounded-full bg-gradient-tapsy"
+              initial={{ width: "0%" }}
+              animate={{ width: paused ? undefined : "100%" }}
+              transition={{ duration: STEP_MS / 1000, ease: "linear" }}
+            />
           </div>
         </div>
       </div>
